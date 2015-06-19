@@ -37,9 +37,16 @@ endif
 " Use the 'man' wrapper function in fish to include fish's man pages.
 setlocal keywordprg=fish\ -c\ man\\
 
-let b:match_words = escape(
-            \'<%(begin|function|%(else\s\+)\@<!if|switch|while|for)>:<else\s\+if>:<else>:<end>'
-            \, '<>%|)')
+let b:match_ignorecase = 0
+if has('patch-7.3.1037')
+    let s:if = '\%(else\s\+\)\@15<!if'
+else
+    let s:if = '\%(else\s\+\)\@<!if'
+endif
+
+let b:match_words =
+            \ '\<\%(begin\|function\|'.s:if.'\|switch\|while\|for\)\>'
+            \.':\<\%(else\%(\s*if\)\?\|case\)\>:\<end\>'
 
 let b:endwise_addition = 'end'
 let b:endwise_words = 'begin,function,if,switch,while,for'
