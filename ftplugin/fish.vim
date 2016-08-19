@@ -1,3 +1,11 @@
+if exists('b:did_ftplugin')
+    finish
+end
+let b:did_ftplugin = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
+
 setlocal comments=:#
 setlocal commentstring=#%s
 setlocal define=\\v^\\s*function>
@@ -27,13 +35,29 @@ else
 endif
 
 " Use the 'man' wrapper function in fish to include fish's man pages.
-" Have to use a script for this; 'fish -c man' would make the the man page an
-" argument to fish instead of man.
-execute 'setlocal keywordprg=fish\ '.expand('<sfile>:p:h:h').'/bin/man.fish'
+setlocal keywordprg=fish\ -c\ man\\
+
+let b:match_ignorecase = 0
+if has('patch-7.3.1037')
+    let s:if = '\%(else\s\+\)\@15<!if'
+else
+    let s:if = '\%(else\s\+\)\@<!if'
+endif
 
 let b:match_words =
-            \ escape('<%(begin|function|if|switch|while|for)>:<end>', '<>%|)')
+            \ '\<\%(begin\|function\|'.s:if.'\|switch\|while\|for\)\>'
+            \.':\<\%(else\%(\s*if\)\?\|case\)\>:\<end\>'
 
 let b:endwise_addition = 'end'
 let b:endwise_words = 'begin,function,if,switch,while,for'
 let b:endwise_syngroups = 'fishKeyword,fishConditional,fishRepeat'
+
+let b:undo_ftplugin = "
+            \ setlocal comments< commentstring< define< foldexpr< formatoptions<
+            \|setlocal include< iskeyword< suffixesadd<
+            \|setlocal formatexpr< omnifunc< path< keywordprg<
+            \|unlet! b:match_words b:endwise_addition b:endwise_words b:endwise_syngroups
+            \"
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
