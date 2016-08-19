@@ -7,3 +7,5 @@ setlocal tabstop=4
 setlocal shiftwidth=4
 " On pressing tab, insert 4 spaces
 setlocal expandtab
+
+" vim:set et sts=4 sw=4 ts=4:

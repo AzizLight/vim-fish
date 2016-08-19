@@ -11,3 +11,5 @@ autocmd BufRead *
             \ if getline(1) =~# '\v^#!%(\f*/|/usr/bin/env\s*<)fish>' |
             \     setlocal filetype=fish |
             \ endif
+
+" vim:set et sts=4 sw=4 ts=4:

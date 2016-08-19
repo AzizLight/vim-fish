@@ -23,20 +23,20 @@ syntax keyword fishKeyword contained
             \ nextd not open popd prevd psub pushd pwd random read return
             \ set_color source status trap type ulimit umask vared
 syntax keyword fishKeyword command contained nextgroup=@fishCommand skipwhite
-syn match fishKeyword "\.\ze\%(\s\|$\)" contained
-syn cluster fishCommand add=fishKeyword
+syntax match fishKeyword "\.\ze\%(\s\|$\)" contained
+syntax cluster fishCommand add=fishKeyword
 syntax keyword fishKeywordError do done then fi export local contained
-syn cluster fishCommand add=fishKeywordError
+syntax cluster fishCommand add=fishKeywordError
 
 syntax keyword fishConditional if else switch or and not contained nextgroup=@fishCommand skipwhite
-syn cluster fishCommand add=fishConditional
+syntax cluster fishCommand add=fishConditional
 syntax keyword fishRepeat while contained nextgroup=@fishCommand skipwhite
 syntax keyword fishRepeat for contained nextgroup=fishRepeatForVar skipwhite
-syn cluster fishCommand add=fishRepeat
+syntax cluster fishCommand add=fishRepeat
 syntax region fishRepeatForVar start="\S" end="\ze\%(\s\|;\|$\)" contained contains=@fishValues,@fishEscapeSeqs nextgroup=fishRepeatIn skipwhite
 syntax keyword fishRepeatIn in contained
 syntax keyword fishLabel case contained
-syn cluster fishCommand add=fishLabel
+syntax cluster fishCommand add=fishLabel
 
 syntax match fishOperator "[*?]"
 syntax match fishOperator "[;&]" nextgroup=@fishCommand skipwhite
@@ -58,7 +58,7 @@ syntax match fishNumEscape "\\\(\d\d\d\|[xX]\x\x\|u\x\x\x\x\(\x\x\x\x\)\?\|c\a\)
 syntax cluster fishEscapeSeqs contains=fishSpecial,fishEscape,fishNumEscape
 
 syntax match fishSet "\<set\>\ze\%(\s\|;\|$\)" contained nextgroup=fishSetOpt,fishSetIdentifier skipwhite
-syn cluster fishCommand add=fishSet
+syntax cluster fishCommand add=fishSet
 syntax region fishSetIdentifier start="\S" end="\ze\%(\s\|;\|$\)" contained contains=@fishValues,@fishEscapeSeqs
 syntax match fishSetOpt contained "-[eglLnquUx]\+\ze\%(\s\|;\|$\)" nextgroup=fishSetOpt,fishSetIdentifier skipwhite
 syntax match fishSetOpt contained "--\(local\|global\|universal\|names\|\(un\)\=export\|erase\|query\|long\)\ze\%(\s\|;\|$\)" nextgroup=fishSetOpt,fishSetIdentifier skipwhite
@@ -78,7 +78,7 @@ syntax cluster fishValues contains=fishVarDeref,fishString,fishNumber,fishVarDer
 
 syntax region fishTest matchgroup=fishOperator start="\[" end="\]" end="\ze[;#]" excludenl end="$" contained contains=@fishTestContents
 syntax region fishTest matchgroup=fishKeyword start="\<test\>" end="\ze[;#]" excludenl end="$" contained contains=@fishTestContents
-syn cluster fishCommand add=fishTest
+syntax cluster fishCommand add=fishTest
 syntax match fishTestOp contained "\s\@1<=-[a-hnoprstuwxzLS]\>"
 syntax match fishTestOp contained "\s\@1<=-\%(eq\|ne\|ge\|gt\|le\|lt\)\>"
 syntax match fishTestOp contained excludenl "\s\@1<=\%(!=\|!\|=\)\%($\|\s\@=\)"
@@ -123,7 +123,9 @@ highlight default link fishKeywordError fishError
 highlight default link fishOpError fishError
 highlight default link fishVarDerefError fishError
 
-syn sync minlines=50
-syn sync maxlines=500
+syntax sync minlines=50
+syntax sync maxlines=500
 
 let b:current_syntax = 'fish'
+
+" vim:set et sts=4 sw=4 ts=4:

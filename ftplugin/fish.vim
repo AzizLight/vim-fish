@@ -28,7 +28,7 @@ endif
 if executable('fish')
     setlocal omnifunc=fish#Complete
     for s:path in split(system("fish -c 'echo $fish_function_path'"))
-        execute 'setlocal path+='.s:path
+        execute 'setlocal path+=' . s:path
     endfor
 else
     setlocal omnifunc=syntaxcomplete#Complete
@@ -45,19 +45,20 @@ else
 endif
 
 let b:match_words =
-            \ '\<\%(begin\|function\|'.s:if.'\|switch\|while\|for\)\>'
-            \.':\<\%(else\%(\s*if\)\?\|case\)\>:\<end\>'
+            \   '\<\%(begin\|function\|' . s:if . '\|switch\|while\|for\)\>'
+            \ . ':\<\%(else\%(\s*if\)\?\|case\)\>:\<end\>'
 
 let b:endwise_addition = 'end'
 let b:endwise_words = 'begin,function,if,switch,while,for'
 let b:endwise_syngroups = 'fishKeyword,fishConditional,fishRepeat'
 
-let b:undo_ftplugin = "
-            \ setlocal comments< commentstring< define< foldexpr< formatoptions<
-            \|setlocal include< iskeyword< suffixesadd<
-            \|setlocal formatexpr< omnifunc< path< keywordprg<
-            \|unlet! b:match_words b:endwise_addition b:endwise_words b:endwise_syngroups
-            \"
+let b:undo_ftplugin =
+            \   'setlocal comments< commentstring< define< foldexpr< formatoptions<'
+            \ . '| setlocal include< iskeyword< suffixesadd<'
+            \ . '| setlocal formatexpr< omnifunc< path< keywordprg<'
+            \ . '| unlet! b:match_words b:endwise_addition b:endwise_words b:endwise_syngroups'
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
+
+" vim:set et sts=4 sw=4 ts=4:

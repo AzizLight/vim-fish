@@ -16,26 +16,26 @@ set cpo&vim
 " This function can't be script-local, it doesn't work when recalculating. I
 " don't know why that is.
 function! FishProfileFoldExpr(lnum)
-	let len = strlen(matchstr(getline(a:lnum), '\d*\t\d*\t\zs-*>'))
-	return len ? '>'.len : '='
+    let len = strlen(matchstr(getline(a:lnum), '\d*\t\d*\t\zs-*>'))
+    return len ? '>' . len : '='
 endfunction
 
 " This function can't be script-local, apparently that just doesn't work.
 function! FishProfileFoldText(foldstart, foldend) " {{{
-	let line = getline(a:foldstart)
+    let line = getline(a:foldstart)
 
-	" expand tabs into spaces
-	while 1
-		let idx = stridx(line, "\t")
-		if idx == -1
-			break
-		endif
-		let width = strdisplaywidth("\t", idx)
-		let line = strpart(line, 0, idx) . repeat(" ", width) . line[idx+1:]
-	endwhile
+    " expand tabs into spaces
+    while 1
+        let idx = stridx(line, "\t")
+        if idx == -1
+            break
+        endif
+        let width = strdisplaywidth("\t", idx)
+        let line = strpart(line, 0, idx) . repeat(" ", width) . line[idx+1:]
+    endwhile
 
-	let numlines = a:foldend - a:foldstart + 1
-	return line . '… (' . numlines . ')'
+    let numlines = a:foldend - a:foldstart + 1
+    return line . '… (' . numlines . ')'
 endfunction " }}}
 
 " Variables {{{1
@@ -51,15 +51,14 @@ setlocal tabstop=8
 
 " Cleanup {{{1
 
-let b:undo_ftplugin = "
-			\ setlocal foldexpr< foldmethod< foldlevel< foldtext< tabstop<
-			\|delfunction FishProfileFoldExpr
-			\|delfunction FishProfileFoldText
-			\"
+let b:undo_ftplugin =
+            \   'setlocal foldexpr< foldmethod< foldlevel< foldtext< tabstop<'
+            \ . ' | delfunction FishProfileFoldExpr'
+            \ . ' | delfunction FishProfileFoldText'
 
 " }}}1
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim: set noet sw=4 ts=4 sts=4:
+" vim:set et sts=4 sw=4 ts=4:

@@ -18,7 +18,7 @@ function! s:FindPrevLnum(lnum)
         return 0
     endif
     let l:lnum = prevnonblank(a:lnum)
-    while l:lnum > 0 && ( s:IsContinuedLine(l:lnum) || s:IsString(l:lnum, 1) )
+    while l:lnum > 0 && (s:IsContinuedLine(l:lnum) || s:IsString(l:lnum, 1))
         let l:lnum = prevnonblank(l:lnum - 1)
     endwhile
     return l:lnum
@@ -110,7 +110,7 @@ function! fish#Format()
     if mode() =~# '\v^%(i|R)$'
         return 1
     else
-        let l:command = v:lnum.','.(v:lnum+v:count-1).'!fish_indent'
+        let l:command = v:lnum . ',' . (v:lnum + v:count - 1) . '!fish_indent'
         echo l:command
         execute l:command
         " Fix indentation and replace tabs with spaces if necessary.
@@ -137,14 +137,16 @@ function! fish#Complete(findstart, base)
             return []
         endif
         let l:results = []
-        let l:completions =
-                    \ system('fish -c "complete -C'.shellescape(a:base).'"')
+        let l:completions = system('fish -c "complete -C' . shellescape(a:base) . '"')
         let l:cmd = substitute(a:base, '\v\S+$', '', '')
         for l:line in split(l:completions, '\n')
             let l:tokens = split(l:line, '\t')
-            call add(l:results, {'word': l:cmd.l:tokens[0],
-                                \'abbr': l:tokens[0],
-                                \'menu': get(l:tokens, 1, '')})
+            call add(l:results,
+                        \ {
+                        \     'word': l:cmd . l:tokens[0],
+                        \     'abbr': l:tokens[0],
+                        \     'menu': get(l:tokens, 1, '')
+                        \ })
         endfor
         return l:results
     endif
@@ -153,3 +155,5 @@ endfunction
 function! fish#errorformat()
     return '%Afish: %m,%-G%*\\ ^,%-Z%f (line %l):%s'
 endfunction
+
+" vim:set et sts=4 sw=4 ts=4:
